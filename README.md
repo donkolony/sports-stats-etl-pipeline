@@ -181,6 +181,20 @@ dbt build execution flow
             (fct_match_results - fct_player_stats - dim_teams)
 ```
 
+## dbt Model Lineage
+
+Our **dbt** project follows a layered dimensional modeling approach, transforming raw API data into clean, analytics-ready tables. 
+
+### Model Lineage
+
+```text
+stg_standings ──────────► dim_teams 
+                              │
+                              ├──► fct_player_stats ◄── stg_players
+                              │
+                              └──► fct_match_results ◄── stg_matches
+```
+
 ## Related Project
 
 The transformed data stored in DuckDB is shared with `sports-stats-api-cloud`, which exposes it as a REST API deployed to the cloud.
