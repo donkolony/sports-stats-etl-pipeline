@@ -83,6 +83,104 @@ Since DuckDB is optimized for analytical workloads but generally permits only on
 
 This approach provides excellent analytical performance while keeping the architecture lightweight and easy to maintain.
 
+## Data Flow & Idempotency
+
+The pipeline follows a clear, layered architecture where data progresses through a series of stages. Each layer has a specific responsibility, making the pipeline easier to understand, maintain, and debug.
+
+### Data Flow
+
+Data moves through the following layers in sequence:
+
+```text
+Football-Data.org API
+          │
+          ▼
+ Raw JSON (Local Data Lake)
+          │
+          ▼
+ DuckDB - Raw Schema
+          │
+          ▼
+ DuckDB - Staging Schema
+          │
+          ▼
+ DuckDB - Marts Schema
+```
+
+---
+
+### Idempotency Strategy
+
+To ensure the pipeline can be safely rerun without creating duplicate records, we use a **partition overwrite** (delete-and-insert) strategy.
+
+For each execution:
+
+1. The pipeline identifies the partition for the current run (for example, a specific `match_date`).
+2. Any existing records for that date are removed using a `DELETE` statement.
+3. The latest data is then inserted from the raw JSON files into DuckDB.
+
+This approach offers several advantages:
+
+- Prevents duplicate records when a job is rerun.
+- Allows failed pipeline runs to be safely retried.
+- Leaves historical data untouched.
+- Avoids the overhead of rebuilding entire tables.
+
+## Airflow DAG & Task Dependencies
+
+Our Airflow **Directed Acyclic Graph (DAG)** orchestrates the pipeline by defining a clear sequence of tasks and their dependencies. 
+
+### Task Execution Flow
+
+#### Parallel Ingestion
+
+The pipeline begins by extracting data for the three primary entities: Matches, Players, and Standings. Each extraction and loading process runs independently, allowing Airflow to execute them in parallel.
+
+#### The Convergence Point
+
+Before any transformations begin, Airflow waits for **all three datasets** to be successfully loaded into the DuckDB **Raw** schema. 
+
+#### Transformation & Testing
+
+Rather than running `dbt run` and `dbt test` as separate tasks, the pipeline uses the `dbt build` command. This approach combines model execution and testing into a single workflow.
+
+```text
+dbt build execution flow
+
+[ dbt_build_staging ]
+   ├─► Build: stg_matches (clean & format raw data)
+   └─► Test:  stg_matches (check for nulls/duplicates)
+               │
+         (if tests pass)
+               │
+               ▼
+[ dbt_build_marts ]
+   ├─► Build: fct_match_results (join with dimensions)
+   └─► Test:  fct_match_results (final QA check)
+```
+
+---
+
+### DAG Structure Overview
+
+```text
+   [ fetch_matches ]         [ fetch_players ]         [ fetch_standings ]
+   (API -> JSON file)        (API -> JSON file)        (API -> JSON file)
+           |                         |                         |
+           v                         v                         v
+   [ load_matches ]          [ load_players ]          [ load_standings ]
+ (partition overwrite)     (partition overwrite)     (partition overwrite)
+           |                         |                         |
+            \                        |                        /
+             \                       v                       /
+              \---------> [ dbt_build_staging ] <-----------/
+               (stg_matches - stg_players - stg_standings)
+                                     |
+                                     v
+                           [ dbt_build_marts ]
+            (fct_match_results - fct_player_stats - dim_teams)
+```
+
 ## Related Project
 
 The transformed data stored in DuckDB is shared with `sports-stats-api-cloud`, which exposes it as a REST API deployed to the cloud.
