@@ -58,5 +58,4 @@ TODO
 
 # Documentation
 
-**Verification Code:**
-WTC-NTQUAPBD
+>Verification Code: WTC-NTQUAPBD

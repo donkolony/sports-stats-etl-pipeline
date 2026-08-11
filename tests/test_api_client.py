@@ -1,4 +1,3 @@
-
 from src.ingestion.api_client import fetch_api_data
 
 
@@ -19,8 +18,6 @@ def test_fetch_api_data_sucess(mocker):
     # Call actual function which will get intercepted
     result = fetch_api_data("matches")
 
-
     # 3. Assert
     assert result == mocker_response_data
     mock_get.assert_called_once()
-    
