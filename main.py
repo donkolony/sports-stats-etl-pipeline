@@ -1,6 +1,7 @@
-import json
+from datetime import datetime
 
 from src.ingestion.api_client import fetch_api_data
+from src.ingestion.local_storage import save_raw_data
 
 
 def main() -> None:
@@ -9,9 +10,9 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    match_endpoint = "competitions/PL/matches"
-    raw_data = fetch_api_data(endpoint=match_endpoint)
+    match_endpoint: str = "competitions/PL/teams"  # TODO make endpoints dynamic
+    today: datetime = datetime.now()
 
-    file = "data/raw/data.json"
-    with open(file=file, mode="w") as f:
-        json.dump(obj=raw_data, fp=f, indent=4)
+    raw_data: dict = fetch_api_data(endpoint=match_endpoint)
+
+    save_raw_data(data=raw_data, entity=match_endpoint, execution_date=today)
