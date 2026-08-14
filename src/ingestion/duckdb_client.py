@@ -7,6 +7,7 @@ import duckdb
 def load_raw_data(
     entity: str,
     execution_date: datetime,
+    file_path: str,
     database: str = "storage/warehouse/football_sports.db",
 ) -> None:
     """
@@ -15,24 +16,14 @@ def load_raw_data(
     Args:
         entity (str): The data domain to load (e.g. "matches", "teams", "standings") used to locate the source
         JSON and name the  target table
-
         execution_date (datetime): The Airflow logical date identifying which partition to load and overwrite
-
+        file_path (str): the file path to fetch the data to load into the db
         database (str, optional): Path to the DuckDB database file. Defaults to "storage/warehouse/football_sports.db".
     """
 
-    year: str = execution_date.strftime("%Y")
-    month: str = execution_date.strftime("%m")
-    day: str = execution_date.strftime("%d")
-
-    file_path: Path = (
-        Path("storage") / "raw" / entity / year / month / day / "data.json"
-    )
-
     # SQL variables
-    table_name: str = f"raw_{entity.split('/')[-1]}"
+    table_name: str = f"raw_{entity}"
     column_name: str = "ingestion_date"
-
     date_str: str = execution_date.strftime("%Y-%m-%d")
 
     print(f"Loading `{table_name}` data into DuckDB table `{table_name}`...")
@@ -43,6 +34,8 @@ def load_raw_data(
 
     # Connect to DuckDB and execute the database the transaction
     with duckdb.connect(database=database) as con:
+        con.execute("Start Transaction")
+
         # 1. Create table
         con.sql(
             f"""
@@ -69,4 +62,6 @@ def load_raw_data(
             """
         )
 
-    print(f"Successfully loaded '{entity}' data.")
+        # Save the transaction
+        con.execute("COMMIT")
+        print(f"Successfully loaded '{entity}' data.")
