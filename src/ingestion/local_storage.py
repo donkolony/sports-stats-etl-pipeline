@@ -5,14 +5,14 @@ from pathlib import Path
 
 def save_raw_data(data: dict, entity: str, execution_date: datetime) -> None:
     """
-    Saves the raw data dictionary from the api client as a JSON file in a date 
-    partitioned data lake.
+    Saves the raw data dictionary from the api client as a JSON file in a date partitioned data lake.
 
     Args:
         data (dict): The raw API response payload to persist
+
         entity (str): The data domain being saved (e.g. "matches", "standings")
-        execution_date (datetime): The Airflow logical date, used to determine the 
-        partition path
+
+        execution_date (datetime): The Airflow logical date, used to determine the partition path
     """
 
     year: str = execution_date.strftime("%Y")
