@@ -4,19 +4,19 @@ from pathlib import Path
 
 
 def save_raw_data(
-    data: dict, competition: str, entity: str, execution_date: datetime
+    data: dict, competition_code: str, entity: str, execution_date: datetime
 ) -> str:
     """
     Saves the raw data dictionary as a JSON file in a date-partitioned data lake.
 
     Args:
         data (dict): The raw API response payload to persist
-        competition (str): The league code (e.g., "PL", "BL1")
+        competition_code (str): The competition code (e.g., "PL", "BL1")
         entity (str): The data domain being saved (e.g. "matches", "standings", "teams")
         execution_date (datetime): The Airflow logical date, used to determine the partition path
 
     Returns:
-        str: Hands off state (file path) 
+        str: Hands off state (file path)
     """
 
     year: str = execution_date.strftime("%Y")
@@ -27,7 +27,7 @@ def save_raw_data(
         Path("storage")
         / "raw"
         / "competitions"
-        / competition
+        / competition_code
         / entity
         / year
         / month
