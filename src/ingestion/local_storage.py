@@ -24,7 +24,7 @@ def save_raw_data(
     day: str = execution_date.strftime("%d")
 
     dir_path = (
-        Path("storage")
+        Path("data")
         / "raw"
         / "competitions"
         / competition_code
@@ -42,4 +42,4 @@ def save_raw_data(
     with open(file=file_path, mode="w") as f:
         json.dump(obj=data, fp=f, indent=4)
 
-    return str(dir_path)
+    return str(file_path)
