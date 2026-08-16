@@ -8,7 +8,7 @@ def load_raw_data(
     entity: str,
     execution_date: datetime,
     file_path: str,
-    database: str = "storage/warehouse/football_sports.db",
+    database: str = "data/warehouse/football_sports.db",
 ) -> None:
     """
     Loads raw JSON data from the data lake into DuckDB using an idempotent delete-insert strategy
@@ -18,7 +18,7 @@ def load_raw_data(
         JSON and name the  target table
         execution_date (datetime): The Airflow logical date identifying which partition to load and overwrite
         file_path (str): the file path to fetch the data to load into the db
-        database (str, optional): Path to the DuckDB database file. Defaults to "storage/warehouse/football_sports.db".
+        database (str, optional): Path to the DuckDB database file. Defaults to "data/warehouse/football_sports.db".
     """
 
     # SQL variables
