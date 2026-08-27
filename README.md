@@ -1,4 +1,4 @@
-[![Live Demo](https://img.shields.io/badge/Demo-Video-red?style=for-the-badge\&logo=youtube)](youtube.com)
+[![Live Demo](https://img.shields.io/badge/Demo-Video-red?style=for-the-badge&logo=youtube)](youtube.com)
 [![Backend](https://img.shields.io/badge/API-Documentation-green?style=for-the-badge)](linkhere)
 
 # Sports Stats ETL Pipeline
@@ -42,20 +42,81 @@ DuckDB (analytics-ready marts)
 └───────────────────────────────┘
 ```
 
-TODO 
+---
 
 # Local Setup
 
 ## Prerequisites
 
+Before getting started, ensure you have:
+
+- Python 3.10+
+- `uv` (optional but recommended)
+
+Install `uv`:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+---
+
 ## 1. Clone the Repository
+
+```bash
+git clone https://github.com/donkolony/sports-stats-etl-pipeline.git
+cd sports-stats-etl-pipeline
+```
+
+---
 
 ## 2. Create a Virtual Environment
 
+```bash
+python -m venv .venv
+source .venv/bin/activate    # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Option B - Using uv
+
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -r pyproject.toml
+```
+
+---
+
 ## 3. Configure API Credentials
+
+Obtain a free API key from Football-Data.org.
+
+Create a `.env` file in the project root:
+
+```bash
+touch .env
+```
+
+Add your API key:
+
+```text
+FOOTBALL_DATA_API_KEY="your_actual_key_here" # ref .env.example
+```
+
+---
 
 ## 4. Run the Pipeline
 
+```bash
+uv run -m src.ingestion,runner -c PL matches
+
+PL: competition code (Premier League)
+matches: entity
+```
+
 # Documentation
 
->Verification Code: WTC-NTQUAPBD
+- Python Ingestion
+
+> Verification Code: WTC-NTQUAPBD
