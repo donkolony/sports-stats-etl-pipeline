@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: football_data
+    schema: main                # DuckDB's default schema name
+    tables:
+      - name: raw_matches       # The exact name of the table in DuckDB
+      - name: raw_standings
+      - name: raw_players
