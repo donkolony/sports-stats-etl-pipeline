@@ -1,13 +1,13 @@
 with source as (
 
-    select UNNEST(matches) as match_record
-    from {{ source('football_data', 'raw_matches') }}
+    SELECT UNNEST(matches) as match_record
+    FROM {{ source('football_data', 'raw_matches') }}
 
 ),
 
 renamed as (
 
-    select
+    SELECT
         match_record.id as match_id,
 
         match_record.homeTeam.id as home_team_id,
@@ -20,8 +20,8 @@ renamed as (
         match_record.score.fullTime.home as home_goals,
         match_record.score.fullTime.away as away_goals
 
-    from source
+    FROM source
 
 )
 
-select * from renamed
+SELECT * FROM renamed
