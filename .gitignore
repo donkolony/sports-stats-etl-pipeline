@@ -217,7 +217,14 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-
 # TEMP
 data/
 storage/
+
+target/
+dbt_packages/
+logs/
+.env
+
+*.duckdb
+*.db
