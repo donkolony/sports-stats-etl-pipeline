@@ -6,4 +6,4 @@ sources:
     tables:
       - name: raw_matches       # The exact name of the table in DuckDB
       - name: raw_standings
-      - name: raw_players
+      - name: raw_teams
