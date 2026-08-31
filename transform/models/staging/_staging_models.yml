@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_matches
+    columns:
+      - name: match_id
+        tests:
+          - unique
+          - not_null
+          
+      - name: match_status
+        tests:
+          - accepted_values:
+              values: ['FINISHED', 'SCHEDULED', 'POSTPONED', 'TIMED', 'IN_PLAY', 'CANCELLED']
+              
+      - name: home_team_id
+        tests:
+          - relationships:
+              to: ref('dim_teams')
+              field: team_id
