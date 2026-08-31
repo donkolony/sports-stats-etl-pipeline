@@ -1,4 +1,4 @@
-.PHONY: help ingest transform build clean run-all
+.PHONY: help ingest tests transform build clean run-all
 
 .DEFAULT_GOAL := help
 
@@ -14,6 +14,7 @@ help:
 	@echo "Targets:"
 	@echo "  help    	: Show this help message"
 	@echo "  ingest  	: Run the ingestion pipeline for matches, standings, and teams"
+	@echo "  pytest  	: Run pytest for the ingestion layer"
 	@echo "  transform  	: Run 'dbt-build' to execute transformations and run tests"
 	@echo "  run-all  	: RUn the complete pipeline (ingest -> transform)"
 	@echo "  clean   	: Remove the local DuckDB warehouse files to reset the schema"
@@ -26,6 +27,9 @@ ingest:
 	uv run -m src.ingestion.runner -c PL teams
 	@echo "Ingestion complete!"
 
+tests:
+	@echo "Starting unnittest for the ingestion layer"
+	uv run -m pytest tests -v
 
 transform:
 	@echo "Building dbt models and excuting data quality tests..."
