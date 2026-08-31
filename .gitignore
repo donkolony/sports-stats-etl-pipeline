@@ -221,6 +221,8 @@ __marimo__/
 data/
 storage/
 
+docs/_*
+
 target/
 dbt_packages/
 logs/
