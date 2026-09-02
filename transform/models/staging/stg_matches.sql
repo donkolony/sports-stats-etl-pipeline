@@ -15,7 +15,15 @@ renamed as (
         
         match_record.utcDate as match_date,
         match_record.matchday,
-        match_record.status as match_status,
+
+        -- some status returns a date timestamp (e.g., '2026-10-24 13:00:00Z) instead of a string
+        -- rename the date timestamp to prevent downstream test failures
+        CASE
+            WHEN match_record.status LIKE '202%' THEN 'TIMED'
+            ELSE match_record.status
+        END as match_status,
+
+        -- match_record.status as match_status,
 
         match_record.score.fullTime.home as home_goals,
         match_record.score.fullTime.away as away_goals
