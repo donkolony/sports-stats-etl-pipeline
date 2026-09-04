@@ -230,3 +230,9 @@ logs/
 
 *.duckdb
 *.db
+
+# Airflow local files
+airflow.db
+airflow.db-shm
+airflow.db-wal
+airflow.cfg
