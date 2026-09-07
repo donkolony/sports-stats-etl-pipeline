@@ -10,7 +10,7 @@ default_args = {
 with DAG(
     dag_id="sports-stats-etl-pipeline",
     default_args=default_args,
-    start_date=pendulum.datetime(2026, 9, 7, tz="UTC"),
+    start_date=pendulum.datetime(2026, 9, 5, tz="UTC"),
     schedule="@daily",
     catchup=False,
 ) as dag:
