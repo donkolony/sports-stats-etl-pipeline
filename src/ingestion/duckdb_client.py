@@ -1,7 +1,10 @@
+import logging
 from datetime import datetime
 from pathlib import Path
 
 import duckdb
+
+logger = logging.getLogger(__name__)
 
 
 def load_raw_data(
@@ -26,7 +29,7 @@ def load_raw_data(
     column_name: str = "ingestion_date"
     date_str: str = execution_date.strftime("%Y-%m-%d")
 
-    print(f"Loading `{table_name}` data into DuckDB table `{table_name}`...")
+    logger.info(f"Loading `{table_name}` data into DuckDB table `{table_name}`...")
 
     # Defensively ensure the database directory exists else create it
     db_dir = Path(database).parent
@@ -39,7 +42,7 @@ def load_raw_data(
         # 1. Create table
         con.sql(
             f"""
-            CREATE TABLE IF NOT EXISTS {table_name} AS
+            CREATE OR REPLACE TABLE {table_name} AS
             SELECT *, '{date_str}' AS {column_name}
             FROM read_json_auto('{file_path}')
             """
@@ -64,4 +67,4 @@ def load_raw_data(
 
         # Save the transaction
         con.execute("COMMIT")
-        print(f"Successfully loaded '{entity}' data.")
+        logger.info(f"Successfully loaded '{entity}' data.")
