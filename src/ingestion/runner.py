@@ -1,10 +1,19 @@
 import argparse
+import logging
 from datetime import UTC, datetime
 
 from src.ingestion.api_client import fetch_api_data
 from src.ingestion.config import AVAILABLE_ENTITIES, COMPETITION_MAP
 from src.ingestion.duckdb_client import load_raw_data
 from src.ingestion.local_storage import save_raw_data
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+logger = logging.getLogger(__name__)
 
 
 def run_ingestion(competition_code: str, entity: str) -> None:
@@ -31,7 +40,7 @@ def run_ingestion(competition_code: str, entity: str) -> None:
     execution_date: datetime = datetime.now(UTC)
     league = COMPETITION_MAP.get(competition_code)
 
-    print(
+    logger.info(
         f"Starting ingestion for `{entity}` in the {league} at {execution_date.strftime('%Y-%m-%d %H:%M:%S')}"
     )
 
@@ -51,7 +60,7 @@ def run_ingestion(competition_code: str, entity: str) -> None:
         entity=entity, execution_date=execution_date, file_path=saved_file_path
     )
 
-    print(f"Successfully ingested and saved data for `{entity}` in the {league}")
+    logger.info(f"Successfully ingested and saved data for `{entity}` in the {league}")
 
 
 if __name__ == "__main__":

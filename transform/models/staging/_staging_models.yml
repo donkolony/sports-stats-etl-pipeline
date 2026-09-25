@@ -11,7 +11,7 @@ models:
       - name: match_status
         tests:
           - accepted_values:
-              values: ['FINISHED', 'SCHEDULED', 'POSTPONED', 'TIMED', 'IN_PLAY', 'CANCELLED']
+              values: ['FINISHED', 'TIMED', 'SCHEDULED', 'POSTPONED', 'IN_PLAY', 'CANCELLED']
               
       - name: home_team_id
         tests:

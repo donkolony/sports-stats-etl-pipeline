@@ -20,7 +20,7 @@ def test_save_raw_data_writes_json_file_to_disk(tmp_path, mocker):
     execution_date = datetime.now(UTC)
 
     # Intercept the pathlib.Path() inside save_raw_data()
-    mock_path = mocker.patch("src.ingestion.local_storage.Path", return_value=tmp_path)
+    mocker.patch("src.ingestion.local_storage.Path", return_value=tmp_path)
 
     fake_file_path = save_raw_data(
         data=fake_api_data,

@@ -22,3 +22,13 @@ def test_fetch_api_data_returns_json_on_200(mocker):
     # 3. Assert
     assert result == fake_api_data
     mock_get.assert_called_once()
+
+
+# # TODO
+# def test_fetch_api_data_returns_json_on_400(mocker):
+#     pass
+
+
+# # TODO
+# def test_fetch_api_data_returns_json_on_500(mocker):
+#     pass
