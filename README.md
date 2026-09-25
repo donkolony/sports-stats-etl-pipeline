@@ -4,8 +4,7 @@ An end-to-end **data engineering pipeline** that extracts Premier League footbal
 
 The transformed data is consumed by the companion cloud project `sports-stats-api-cloud` and visualized through an interactive **Streamlit dashboard**.
 
-[![Live Demo](https://img.shields.io/badge/Demo-Video-red?style=for-the-badge\&logo=youtube)](youtube.com)
-[![Backend](https://img.shields.io/badge/API-Documentation-green?style=for-the-badge)](linkhere)
+[![Live Demo](https://img.shields.io/badge/Demo-Video-red?style=for-the-badge\&logo=youtube)](https://youtu.be/VtJylEOQsho)
 
 ---
 
