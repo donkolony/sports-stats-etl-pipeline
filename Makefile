@@ -17,12 +17,13 @@ help:
 	@echo "  pytest  	: Run pytest for the ingestion layer"
 	@echo "  transform  	: Run 'dbt-build' to execute transformations and run tests"
 	@echo "  run-all  	: RUn the complete pipeline (ingest -> transform)"
+	@echo "  streamlit  	: Create business ready analytic dashboard"
 	@echo "  clean   	: Remove the local DuckDB warehouse files to reset the schema"
 	@echo "=========================================================================="
 
 ingest:
 	@echo "Starting data ingestion..."
-	uv run -m src.ingestion.runner -c PL matches
+	uv run -m src.ingestion.runner -c PL matches 
 	uv run -m src.ingestion.runner -c PL standings
 	uv run -m src.ingestion.runner -c PL teams
 	@echo "Ingestion complete!"
@@ -39,6 +40,10 @@ build: transform
 
 run-all: ingest transform
 	@echo "End-to-end pipeline run finished successfully!"
+
+streamlit:
+	@echo "Building Streamlit Dashboard for the Premier League"
+	uv run streamlit run dashboard/app.py
 
 clean:
 	@echo "Cleaning up local DuckDB warehouse..."

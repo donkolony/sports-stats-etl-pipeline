@@ -236,3 +236,7 @@ airflow.db
 airflow.db-shm
 airflow.db-wal
 airflow.cfg
+
+
+.agents
+.claude
